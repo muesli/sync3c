@@ -31,14 +31,14 @@ Downloading: http://cdn.media.ccc.de/congress/2016/h264-hd/33c3-8288-deu-Bonsai_
 Rechte Falschmeldungen-in-sozialen-Netzwerken (...).mp4  313.75 MiB / 313.75 MiB [#################################################] 100.00%
 ```
 
-#### Download all talks from a specific conference, best available quality, including all translations
+#### Download all talks from a specific conference, best available quality & original language only
 ```
 $ $GOPATH/bin/sync3c -acronym eh16 -destination="/my/downloads"
 Conference: Easterhegg 2016, acronym: eh16 (URL: https://api.media.ccc.de/public/conferences/81)
 ...
 ```
 
-#### Download all talks, best available quality & original language only
+#### Download all talks, best available quality, including all translations
 ```
 $ $GOPATH/bin/sync3c -ignoreTranslations=false -destination="/my/downloads"
 ...
