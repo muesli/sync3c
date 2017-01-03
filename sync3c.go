@@ -74,7 +74,7 @@ func main() {
 	}
 
 	for _, v := range ci.Conferences {
-		fmt.Printf("Found conference: %s, URL: %s\n", v.Title, v.URL)
+		fmt.Printf("Conference: %s, URL: %s\n", v.Title, v.URL)
 
 		events, err := findEvents(v.URL)
 		if err != nil {
@@ -89,7 +89,7 @@ func main() {
 			if len(desc) > 0 {
 				desc = " - " + desc
 			}
-			fmt.Printf("\tFound event: %s%s\n", e.Title, desc)
+			fmt.Printf("Event: %s%s\n", e.Title, desc)
 
 			media, err := findMedia(e.URL)
 			if err != nil {
@@ -107,9 +107,9 @@ func main() {
 				}
 
 				if m.Width == 0 {
-					fmt.Printf("\t\tFound audio (%s): %d minutes (HD: %t, %dMiB) %s\n", m.MimeType, m.Length/60, m.HighQuality, m.Size, m.URL)
+					fmt.Printf("\tFound audio (%s): %d minutes (HD: %t, %dMiB) %s\n", m.MimeType, m.Length/60, m.HighQuality, m.Size, m.URL)
 				} else {
-					fmt.Printf("\t\tFound video (%s): %d minutes, %dx%d (HD: %t, %dMiB) %s\n", m.MimeType, m.Length/60, m.Width, m.Height, m.HighQuality, m.Size, m.URL)
+					fmt.Printf("\tFound video (%s): %d minutes, %dx%d (HD: %t, %dMiB) %s\n", m.MimeType, m.Length/60, m.Width, m.Height, m.HighQuality, m.Size, m.URL)
 				}
 
 				prio := priorityForMimeType(m.MimeType)
