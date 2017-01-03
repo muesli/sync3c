@@ -131,15 +131,31 @@ func main() {
 					panic("Unknown mimetype encountered:" + m.MimeType)
 				}
 
-				if prio < highestPriority ||
-					(prio == highestPriority && m.Width > bestMatch.Width) ||
-					(strings.ToLower(bestMatch.Language) != language && strings.ToLower(m.Language) == language) ||
-					highestPriority == -1 {
+				pick := false
+				if highestPriority == -1 {
+					// if we got nothing so far, always pick any available option
+					pick = true
+				}
+				if strings.ToLower(bestMatch.Language) != language && strings.ToLower(m.Language) == language {
+					// we already found something, but this is the preferred language
+					pick = true
+				} else {
+					if prio < highestPriority || (prio == highestPriority && m.Width > bestMatch.Width) {
+						// we already found something, but this has a higher resolution
+						pick = true
+					}
+				}
+
+				if pick {
 					highestPriority = prio
 					bestMatch = m
 				}
 			}
 
+			if len(bestMatch.RecordingURL) == 0 {
+				fmt.Println("Could not find any desired version of this talk, sorry. Skipping!")
+				continue
+			}
 			err = download(v, e, bestMatch)
 			if err != nil {
 				panic(err)
