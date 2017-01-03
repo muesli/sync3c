@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	noTranslations = true
-	downloadPath   = "./downloads/"
+	ignoreTranslations = true
+	downloadPath       = "./downloads/"
 )
 
 var (
@@ -87,7 +87,10 @@ func main() {
 			if len(desc) > 48 {
 				desc = desc[:45] + "..."
 			}
-			fmt.Printf("\tFound event: %s - %s\n", e.Title, desc)
+			if len(desc) > 0 {
+				desc = " - " + desc
+			}
+			fmt.Printf("\tFound event: %s%s\n", e.Title, desc)
 
 			media, err := findMedia(e.URL)
 			if err != nil {
@@ -100,6 +103,10 @@ func main() {
 				panic("No recordings found for this event!")
 			}
 			for _, m := range media.Recordings {
+				if ignoreTranslations && m.Language != e.OriginalLanguage {
+					continue
+				}
+
 				if m.Width == 0 {
 					fmt.Printf("\t\tFound audio (%s): %d minutes (HD: %t, %dMiB) %s\n", m.MimeType, m.Length/60, m.HighQuality, m.Size, m.URL)
 				} else {
@@ -120,14 +127,14 @@ func main() {
 			author := ""
 			subtitle := ""
 			if len(e.Persons) > 0 {
-				author = e.Persons[0] + " - "
+				author = sanitize.BaseName(e.Persons[0]) + " - "
 			}
 			if len(e.Subtitle) > 0 {
-				subtitle = " (" + e.Subtitle + ")"
+				subtitle = " (" + sanitize.BaseName(e.Subtitle) + ")"
 			}
 
 			path := filepath.Join(downloadPath, sanitize.Path(v.Title))
-			basename := sanitize.BaseName(fmt.Sprintf("%s%s%s", author, e.Title, subtitle)) + "." + extensionForMimeTypes[bestMatch.MimeType]
+			basename := fmt.Sprintf("%s%s%s", author, sanitize.BaseName(e.Title), subtitle) + "." + extensionForMimeTypes[bestMatch.MimeType]
 			filename := filepath.Join(path, basename)
 			if _, err := os.Stat(filename); os.IsNotExist(err) {
 				os.MkdirAll(path, 0755)
