@@ -117,8 +117,17 @@ func main() {
 				}
 			}
 
+			author := ""
+			subtitle := ""
+			if len(e.Persons) > 0 {
+				author = e.Persons[0] + " - "
+			}
+			if len(e.Subtitle) > 0 {
+				subtitle = " (" + e.Subtitle + ")"
+			}
+
 			path := filepath.Join(downloadPath, sanitize.Path(v.Title))
-			basename := sanitize.BaseName(e.Title) + "." + extensionForMimeTypes[bestMatch.MimeType]
+			basename := sanitize.BaseName(fmt.Sprintf("%s%s%s", author, e.Title, subtitle)) + "." + extensionForMimeTypes[bestMatch.MimeType]
 			filename := filepath.Join(path, basename)
 			if _, err := os.Stat(filename); os.IsNotExist(err) {
 				os.MkdirAll(path, 0755)
