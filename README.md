@@ -38,9 +38,9 @@ Conference: Easterhegg 2016, acronym: eh16 (URL: https://api.media.ccc.de/public
 ...
 ```
 
-#### Download all talks, best available quality, including all translations
+#### Download all talks, best available quality for a specific language, with fallback to original language
 ```
-$ $GOPATH/bin/sync3c -ignoreTranslations=false -destination="/my/downloads"
+$ $GOPATH/bin/sync3c -language="eng" -destination="/my/downloads"
 ...
 ```
 
