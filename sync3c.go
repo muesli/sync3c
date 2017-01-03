@@ -3,10 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
-	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/kennygrant/sanitize"
@@ -61,46 +58,6 @@ func findConferences(url string) (Conferences, error) {
 
 	err = json.NewDecoder(r.Body).Decode(&ci)
 	return ci, err
-}
-
-func download(v Conference, e Event, m Recording) error {
-	author := ""
-	subtitle := ""
-	if len(e.Persons) > 0 {
-		author = sanitize.BaseName(e.Persons[0]) + " - "
-	}
-	if len(e.Subtitle) > 0 {
-		subtitle = " (" + sanitize.BaseName(e.Subtitle) + ")"
-	}
-
-	path := filepath.Join(downloadPath, sanitize.Path(v.Title))
-	basename := fmt.Sprintf("%s%s%s", author, sanitize.BaseName(e.Title), subtitle) + "." + extensionForMimeTypes[m.MimeType]
-	filename := filepath.Join(path, basename)
-	if _, err := os.Stat(filename); os.IsNotExist(err) {
-		os.MkdirAll(path, 0755)
-
-		fmt.Println("\t\tDownloading:", m.RecordingURL)
-		out, err := os.Create(filename)
-		if err != nil {
-			return err
-		}
-		defer out.Close()
-
-		resp, err := http.Get(m.RecordingURL)
-		if err != nil {
-			return err
-		}
-		defer resp.Body.Close()
-
-		_, err = io.Copy(out, resp.Body)
-		if err != nil {
-			return err
-		}
-	} else {
-		fmt.Println("\t\tFile", filename, "already exists - skipping!")
-	}
-
-	return nil
 }
 
 func main() {
