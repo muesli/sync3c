@@ -84,17 +84,18 @@ func download(v Conference, e Event, m Recording) error {
 		if err != nil {
 			return err
 		}
+		defer out.Close()
+
 		resp, err := http.Get(m.RecordingURL)
 		if err != nil {
 			return err
 		}
+		defer resp.Body.Close()
+
 		_, err = io.Copy(out, resp.Body)
 		if err != nil {
 			return err
 		}
-
-		resp.Body.Close()
-		out.Close()
 	} else {
 		fmt.Println("\t\tFile", filename, "already exists - skipping!")
 	}
@@ -159,7 +160,9 @@ func main() {
 					panic("Unknown mimetype encountered:" + m.MimeType)
 				}
 
-				if prio < highestPriority || (prio == highestPriority && m.Width > bestMatch.Width) || highestPriority == -1 {
+				if prio < highestPriority ||
+					(prio == highestPriority && m.Width > bestMatch.Width) ||
+					highestPriority == -1 {
 					highestPriority = prio
 					bestMatch = m
 				}
