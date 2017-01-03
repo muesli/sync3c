@@ -12,8 +12,8 @@ import (
 )
 
 type WriteCounter struct {
-	Written     int64
-	ProgressBar *goprogressbar.ProgressBar
+	LastDisplayed int64
+	ProgressBar   *goprogressbar.ProgressBar
 }
 
 func SizeToString(size uint64) (str string) {
@@ -41,13 +41,16 @@ func SizeToString(size uint64) (str string) {
 
 func (wc *WriteCounter) Write(p []byte) (int, error) {
 	n := len(p)
-	wc.Written += int64(n)
+	wc.ProgressBar.Current += int64(n)
 
-	wc.ProgressBar.Current = wc.Written
-	wc.ProgressBar.RightAlignedText = fmt.Sprintf("%s / %s",
-		SizeToString(uint64(wc.ProgressBar.Current)),
-		SizeToString(uint64(wc.ProgressBar.Total)))
-	wc.ProgressBar.Print()
+	if wc.ProgressBar.Current > wc.LastDisplayed+32768 || wc.ProgressBar.Current == wc.ProgressBar.Total {
+		wc.LastDisplayed = wc.ProgressBar.Current
+
+		wc.ProgressBar.RightAlignedText = fmt.Sprintf("%s / %s",
+			SizeToString(uint64(wc.ProgressBar.Current)),
+			SizeToString(uint64(wc.ProgressBar.Total)))
+		wc.ProgressBar.Print()
+	}
 
 	return n, nil
 }
@@ -83,7 +86,7 @@ func download(v Conference, e Event, m Recording) error {
 
 		pb := goprogressbar.NewProgressBar(filename, resp.ContentLength, 0, 60)
 
-		src := io.TeeReader(resp.Body, &WriteCounter{Written: 0, ProgressBar: pb})
+		src := io.TeeReader(resp.Body, &WriteCounter{LastDisplayed: 0, ProgressBar: pb})
 		_, err = io.Copy(out, src)
 		if err != nil {
 			return err
