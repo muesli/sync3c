@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"net/http"
 	"strings"
@@ -9,14 +10,15 @@ import (
 	"github.com/kennygrant/sanitize"
 )
 
-const (
-	ignoreTranslations = true
-	downloadPath       = "./downloads/"
-)
+const ()
 
 var (
 	preferredMimeTypes    = []string{"video/webm", "video/mp4", "video/ogg", "audio/ogg", "audio/opus", "audio/mpeg", "application/x-subrip"}
 	extensionForMimeTypes = make(map[string]string)
+
+	downloadPath       string
+	acronym            string
+	ignoreTranslations bool
 )
 
 type Conference struct {
@@ -61,6 +63,11 @@ func findConferences(url string) (Conferences, error) {
 }
 
 func main() {
+	flag.StringVar(&acronym, "acronym", "", "download only media belonging to this conference-acronym (e.g. '33c3')")
+	flag.StringVar(&downloadPath, "destination", "./downloads/", "where to store downloaded media")
+	flag.BoolVar(&ignoreTranslations, "ignoreTranslations", true, "do not download talk translations")
+	flag.Parse()
+
 	extensionForMimeTypes["video/webm"] = "webm"
 	extensionForMimeTypes["video/mp4"] = "mp4"
 	extensionForMimeTypes["video/ogg"] = "ogm"
@@ -74,7 +81,10 @@ func main() {
 	}
 
 	for _, v := range ci.Conferences {
-		fmt.Printf("Conference: %s, URL: %s\n", v.Title, v.URL)
+		fmt.Printf("Conference: %s, acronym: %s (URL: %s)\n", v.Title, v.Acronym, v.URL)
+		if len(acronym) > 0 && strings.ToLower(acronym) != strings.ToLower(v.Acronym) {
+			continue
+		}
 
 		events, err := findEvents(v.URL)
 		if err != nil {
