@@ -16,9 +16,9 @@ var (
 	preferredMimeTypes    = []string{"video/webm", "video/mp4", "video/ogg", "audio/ogg", "audio/opus", "audio/mpeg", "application/x-subrip"}
 	extensionForMimeTypes = make(map[string]string)
 
-	downloadPath       string
-	acronym            string
-	ignoreTranslations bool
+	downloadPath string
+	acronym      string
+	language     string
 )
 
 type Conference struct {
@@ -65,8 +65,11 @@ func findConferences(url string) (Conferences, error) {
 func main() {
 	flag.StringVar(&acronym, "acronym", "", "download only media belonging to this conference-acronym (e.g. '33c3')")
 	flag.StringVar(&downloadPath, "destination", "./downloads/", "where to store downloaded media")
-	flag.BoolVar(&ignoreTranslations, "ignoreTranslations", true, "do not download talk translations")
+	flag.StringVar(&language, "language", "", "preferred language if available (eng, deu or fra)")
 	flag.Parse()
+
+	acronym = strings.ToLower(acronym)
+	language = strings.ToLower(language)
 
 	extensionForMimeTypes["video/webm"] = "webm"
 	extensionForMimeTypes["video/mp4"] = "mp4"
@@ -82,7 +85,7 @@ func main() {
 
 	for _, v := range ci.Conferences {
 		fmt.Printf("Conference: %s, acronym: %s (URL: %s)\n", v.Title, v.Acronym, v.URL)
-		if len(acronym) > 0 && strings.ToLower(acronym) != strings.ToLower(v.Acronym) {
+		if len(acronym) > 0 && acronym != strings.ToLower(v.Acronym) {
 			continue
 		}
 
@@ -112,7 +115,8 @@ func main() {
 				panic("No recordings found for this event!")
 			}
 			for _, m := range media.Recordings {
-				if ignoreTranslations && m.Language != e.OriginalLanguage {
+				if (len(language) == 0 || language != strings.ToLower(m.Language)) &&
+					m.Language != e.OriginalLanguage {
 					continue
 				}
 
@@ -129,6 +133,7 @@ func main() {
 
 				if prio < highestPriority ||
 					(prio == highestPriority && m.Width > bestMatch.Width) ||
+					(strings.ToLower(bestMatch.Language) != language && strings.ToLower(m.Language) == language) ||
 					highestPriority == -1 {
 					highestPriority = prio
 					bestMatch = m

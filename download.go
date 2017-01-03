@@ -58,15 +58,19 @@ func (wc *WriteCounter) Write(p []byte) (int, error) {
 func download(v Conference, e Event, m Recording) error {
 	author := ""
 	subtitle := ""
+	lang := ""
 	if len(e.Persons) > 0 {
 		author = sanitize.BaseName(e.Persons[0]) + " - "
 	}
 	if len(e.Subtitle) > 0 {
 		subtitle = " (" + sanitize.BaseName(e.Subtitle) + ")"
 	}
+	if e.OriginalLanguage != m.Language {
+		lang = " [" + m.Language + "]"
+	}
 
 	path := filepath.Join(downloadPath, sanitize.Path(v.Title))
-	basename := fmt.Sprintf("%s%s%s", author, sanitize.BaseName(e.Title), subtitle) + "." + extensionForMimeTypes[m.MimeType]
+	basename := fmt.Sprintf("%s%s%s%s", author, sanitize.BaseName(e.Title), subtitle, lang) + "." + extensionForMimeTypes[m.MimeType]
 	filename := filepath.Join(path, basename)
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
 		os.MkdirAll(path, 0755)
