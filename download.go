@@ -11,9 +11,8 @@ import (
 	"github.com/muesli/goprogressbar"
 )
 
-type WriteCounter struct {
-	LastDisplayed int64
-	ProgressBar   *goprogressbar.ProgressBar
+type WriteProgressBar struct {
+	ProgressBar *goprogressbar.ProgressBar
 }
 
 func SizeToString(size uint64) (str string) {
@@ -39,18 +38,14 @@ func SizeToString(size uint64) (str string) {
 	return
 }
 
-func (wc *WriteCounter) Write(p []byte) (int, error) {
+func (wc *WriteProgressBar) Write(p []byte) (int, error) {
 	n := len(p)
 	wc.ProgressBar.Current += int64(n)
 
-	if wc.ProgressBar.Current > wc.LastDisplayed+32768 || wc.ProgressBar.Current == wc.ProgressBar.Total {
-		wc.LastDisplayed = wc.ProgressBar.Current
-
-		wc.ProgressBar.RightAlignedText = fmt.Sprintf("%s / %s",
-			SizeToString(uint64(wc.ProgressBar.Current)),
-			SizeToString(uint64(wc.ProgressBar.Total)))
-		wc.ProgressBar.Print()
-	}
+	wc.ProgressBar.RightAlignedText = fmt.Sprintf("%s / %s",
+		SizeToString(uint64(wc.ProgressBar.Current)),
+		SizeToString(uint64(wc.ProgressBar.Total)))
+	wc.ProgressBar.LazyPrint()
 
 	return n, nil
 }
@@ -90,7 +85,7 @@ func download(v Conference, e Event, m Recording) error {
 
 		pb := goprogressbar.NewProgressBar(filename, resp.ContentLength, 0, 60)
 
-		src := io.TeeReader(resp.Body, &WriteCounter{LastDisplayed: 0, ProgressBar: pb})
+		src := io.TeeReader(resp.Body, &WriteProgressBar{ProgressBar: pb})
 		_, err = io.Copy(out, src)
 		if err != nil {
 			return err
