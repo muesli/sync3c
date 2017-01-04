@@ -9,6 +9,8 @@ Per default it will download all talks from all conferences. Be careful, this wi
 
 If you don't specify a download destination (-destination) everything will be stored in a folder named "downloads" in your current working directory.
 
+It will create sub-directories for each conference within that destination and will name downloaded files following this schema: "{author} - {title} ({subtitle}) {translation}.ext". If that file already exists, it will skip the download. Hence you should delete the latest started download should you decide to kill the process mid-download.
+
 ## Installation
 
 Make sure you have a working Go environment. Follow the [Go install instructions](http://golang.org/doc/install.html).
