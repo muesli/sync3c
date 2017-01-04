@@ -1,7 +1,13 @@
 sync3c
 =======
 
-A little tool to sync/mirror media from https://media.ccc.de
+A little tool to sync/download media from https://media.ccc.de
+
+Finds the best available quality of a talk and only downloads that version. It will download each talk in its original language, unless you specify your own preferred language (-language). It will fallback to the original language version if there's no translation available.
+
+Per default it will download all talks from all conferences. Be careful, this will fetch and store several hundred GiB of videos over the network. It's probably a good idea to pass in the name (-name) of a conference you're interested in.
+
+If you don't specify a download destination (-destination) everything will be stored in a folder named "downloads" in your current working directory.
 
 ## Installation
 
