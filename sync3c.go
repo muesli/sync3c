@@ -17,8 +17,9 @@ var (
 	extensionForMimeTypes = make(map[string]string)
 
 	downloadPath string
-	acronym      string
+	name         string
 	language     string
+	listOnly     bool
 )
 
 type Conference struct {
@@ -63,12 +64,17 @@ func findConferences(url string) (Conferences, error) {
 }
 
 func main() {
-	flag.StringVar(&acronym, "acronym", "", "download only media belonging to this conference-acronym (e.g. '33c3')")
+	flag.StringVar(&name, "name", "", "download media of a specific conference only (e.g. '33c3')")
 	flag.StringVar(&downloadPath, "destination", "./downloads/", "where to store downloaded media")
 	flag.StringVar(&language, "language", "", "preferred language if available (eng, deu or fra)")
 	flag.Parse()
 
-	acronym = strings.ToLower(acronym)
+	if len(flag.Args()) > 0 {
+		arg := strings.ToLower(flag.Args()[0])
+		listOnly = arg == "list"
+	}
+
+	name = strings.ToLower(name)
 	language = strings.ToLower(language)
 
 	extensionForMimeTypes["video/webm"] = "webm"
@@ -83,9 +89,14 @@ func main() {
 		panic(err)
 	}
 
+	found := false
 	for _, v := range ci.Conferences {
-		fmt.Printf("Conference: %s, acronym: %s (URL: %s)\n", v.Title, v.Acronym, v.URL)
-		if len(acronym) > 0 && acronym != strings.ToLower(v.Acronym) {
+		if !listOnly && len(name) > 0 && name != strings.ToLower(v.Acronym) {
+			continue
+		}
+		fmt.Printf("Conference: %s (%s)\n", v.Acronym, v.Title)
+		found = true
+		if listOnly {
 			continue
 		}
 
@@ -153,7 +164,7 @@ func main() {
 			}
 
 			if len(bestMatch.RecordingURL) == 0 {
-				fmt.Println("Could not find any desired version of this talk, sorry. Skipping!")
+				fmt.Println("Could not find any desired version of this event, sorry. Skipping!")
 				continue
 			}
 			err = download(v, e, bestMatch)
@@ -165,5 +176,9 @@ func main() {
 		}
 	}
 
-	fmt.Println("Done.")
+	if found {
+		fmt.Println("Done.")
+	} else {
+		fmt.Println("Couldn't find any conference with acronym", name)
+	}
 }

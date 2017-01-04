@@ -19,10 +19,20 @@ If you want to build it manually:
 
 ## Example usage
 
+#### List all available conferences
+```
+$ $GOPATH/bin/sync3c list"
+Conference: 33c3 (33C3: works for me)
+Conference: ds2015 (Datenspuren 2015)
+Conference: eh16 (Easterhegg 2016)
+Conference: 32c3 (32C3: gated communities)
+...
+```
+
 #### Download all talks from all conferences, best available quality & original language only
 ```
 $ $GOPATH/bin/sync3c -destination="/my/downloads"
-Conference: 33C3: works for me, acronym: 33c3 (URL: https://api.media.ccc.de/public/conferences/101)
+Conference: 33c3 (33C3: works for me)
 Event: Bonsai Kitten waren mir lieber - Rechte Falschmeldungen in sozialen Netzwerken - Auf der Hoaxmap werden seit vergangenem Febru...
         Found video (video/mp4): 34 minutes, 1920x1080 (HD: true, 313MiB) https://api.media.ccc.de/public/recordings/13601
         Found audio (audio/mpeg): 33 minutes (HD: false, 31MiB) https://api.media.ccc.de/public/recordings/13797
@@ -33,8 +43,8 @@ Rechte Falschmeldungen-in-sozialen-Netzwerken (...).mp4  313.75 MiB / 313.75 MiB
 
 #### Download all talks from a specific conference, best available quality & original language only
 ```
-$ $GOPATH/bin/sync3c -acronym eh16 -destination="/my/downloads"
-Conference: Easterhegg 2016, acronym: eh16 (URL: https://api.media.ccc.de/public/conferences/81)
+$ $GOPATH/bin/sync3c -name eh16 -destination="/my/downloads"
+Conference: eh16 (Easterhegg 2016)
 ...
 ```
 
