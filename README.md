@@ -21,7 +21,7 @@ If you want to build it manually:
 
 #### List all available conferences
 ```
-$ $GOPATH/bin/sync3c list"
+$ $GOPATH/bin/sync3c list
 Conference: 33c3 (33C3: works for me)
 Conference: ds2015 (Datenspuren 2015)
 Conference: eh16 (Easterhegg 2016)
