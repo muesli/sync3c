@@ -17,7 +17,7 @@ If you want to build it manually:
     go get -u -v
     go build
 
-## Example usage
+## Usage
 
 #### List all available conferences
 ```
