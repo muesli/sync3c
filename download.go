@@ -83,7 +83,7 @@ func download(v Conference, e Event, m Recording) error {
 		}
 		defer resp.Body.Close()
 
-		pb := goprogressbar.NewProgressBar(filename, resp.ContentLength, 0, 60)
+		pb := &goprogressbar.ProgressBar{Text: filename, Total: resp.ContentLength, Width: 60}
 
 		src := io.TeeReader(resp.Body, &WriteProgressBar{ProgressBar: pb})
 		_, err = io.Copy(out, src)
