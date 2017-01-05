@@ -15,11 +15,11 @@ It will create sub-directories for each conference within that destination and w
 
 Make sure you have a working Go environment. Follow the [Go install instructions](http://golang.org/doc/install.html).
 
-First of all you need to checkout the source code:
+To install sync3c, simply run:
 
     go get github.com/muesli/sync3c
 
-If you want to build it manually:
+To compile it from source:
 
     cd $GOPATH/src/github.com/muesli/sync3c
     go get -u -v
