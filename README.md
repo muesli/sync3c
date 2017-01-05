@@ -39,7 +39,7 @@ Conference: 32c3 (32C3: gated communities)
 
 #### Download all talks from all conferences, best available quality & original language only
 ```
-$ $GOPATH/bin/sync3c -destination "/my/downloads"
+$ $GOPATH/bin/sync3c -destination /my/downloads
 Conference: 33c3 (33C3: works for me)
 Event: Bonsai Kitten waren mir lieber - Rechte Falschmeldungen in sozialen Netzwerken - Auf der Hoaxmap werden seit vergangenem Febru...
         Found video (video/mp4): 34 minutes, 1920x1080 (HD: true, 313MiB) https://api.media.ccc.de/public/recordings/13601
@@ -51,14 +51,14 @@ Rechte Falschmeldungen-in-sozialen-Netzwerken (...).mp4  313.75 MiB / 313.75 MiB
 
 #### Download all talks from a specific conference, best available quality & original language only
 ```
-$ $GOPATH/bin/sync3c -name eh16 -destination "/my/downloads"
+$ $GOPATH/bin/sync3c -name eh16 -destination /my/downloads
 Conference: eh16 (Easterhegg 2016)
 ...
 ```
 
 #### Download all talks, best available quality for a specific language, with fallback to original language
 ```
-$ $GOPATH/bin/sync3c -language eng -destination "/my/downloads"
+$ $GOPATH/bin/sync3c -language eng -destination /my/downloads
 ...
 ```
 
