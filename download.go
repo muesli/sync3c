@@ -41,10 +41,6 @@ func SizeToString(size uint64) (str string) {
 func (wc *WriteProgressBar) Write(p []byte) (int, error) {
 	n := len(p)
 	wc.ProgressBar.Current += int64(n)
-
-	wc.ProgressBar.RightAlignedText = fmt.Sprintf("%s / %s",
-		SizeToString(uint64(wc.ProgressBar.Current)),
-		SizeToString(uint64(wc.ProgressBar.Total)))
 	wc.ProgressBar.LazyPrint()
 
 	return n, nil
@@ -83,7 +79,16 @@ func download(v Conference, e Event, m Recording) error {
 		}
 		defer resp.Body.Close()
 
-		pb := &goprogressbar.ProgressBar{Text: filename, Total: resp.ContentLength, Width: 60}
+		pb := &goprogressbar.ProgressBar{
+			Text:  filename,
+			Total: resp.ContentLength,
+			Width: 60,
+			PrependTextFunc: func(p *goprogressbar.ProgressBar) string {
+				return fmt.Sprintf("%s / %s",
+					SizeToString(uint64(p.Current)),
+					SizeToString(uint64(p.Total)))
+			},
+		}
 
 		src := io.TeeReader(resp.Body, &WriteProgressBar{ProgressBar: pb})
 		_, err = io.Copy(out, src)
