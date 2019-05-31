@@ -24,5 +24,6 @@ _testmain.go
 *.prof
 
 sync3c
-downloads/
+/dist
+/downloads
 *~
