@@ -13,6 +13,13 @@ It will create sub-directories for each conference within that destination and w
 
 ## Installation
 
+### Packages & Installers
+
+- Arch Linux: [sync3c](https://aur.archlinux.org/packages/sync3c/)
+- [Binaries](https://github.com/muesli/sync3c/releases) for Linux, macOS & Windows
+
+### From Source
+
 Make sure you have a working Go environment. Follow the [Go install instructions](http://golang.org/doc/install.html).
 
 To install sync3c, simply run:
