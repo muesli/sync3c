@@ -132,14 +132,14 @@ func main() {
 				}
 
 				if m.Width == 0 {
-					fmt.Printf("\tFound audio (%s): %d minutes (HD: %t, %dMiB) %s\n", m.MimeType, m.Length/60, m.HighQuality, m.Size, m.URL)
+					fmt.Printf("\tFound other/audio (%s): %d minutes (HD: %t, %dMiB) %s\n", m.MimeType, m.Length/60, m.HighQuality, m.Size, m.URL)
 				} else {
 					fmt.Printf("\tFound video (%s): %d minutes, %dx%d (HD: %t, %dMiB) %s\n", m.MimeType, m.Length/60, m.Width, m.Height, m.HighQuality, m.Size, m.URL)
 				}
 
 				prio := priorityForMimeType(m.MimeType)
 				if prio < 0 {
-					panic("Unknown mimetype encountered:" + m.MimeType)
+					fmt.Println("Unknown mimetype encountered:" + m.MimeType)
 				}
 
 				pick := false
