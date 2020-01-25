@@ -19,6 +19,7 @@ var (
 	downloadPath string
 	name         string
 	language     string
+	source       string
 	listOnly     bool
 )
 
@@ -67,6 +68,7 @@ func main() {
 	flag.StringVar(&name, "name", "", "download media of a specific conference only (e.g. '33c3')")
 	flag.StringVar(&downloadPath, "destination", "./downloads/", "where to store downloaded media")
 	flag.StringVar(&language, "language", "", "preferred language if available (eng, deu or fra)")
+	flag.StringVar(&source, "source", "", "source of conferences (e.g. 'media.ccc.de', 'media.freifunk.net'")
 	flag.Parse()
 
 	if len(flag.Args()) > 0 {
@@ -76,6 +78,7 @@ func main() {
 
 	name = strings.ToLower(name)
 	language = strings.ToLower(language)
+	source = strings.ToLower(source)
 
 	extensionForMimeTypes["video/webm"] = "webm"
 	extensionForMimeTypes["video/mp4"] = "mp4"
@@ -84,7 +87,11 @@ func main() {
 	extensionForMimeTypes["audio/opus"] = "opus"
 	extensionForMimeTypes["audio/mpeg"] = "mp3"
 
-	ci, err := findConferences("https://api.media.ccc.de/public/conferences")
+	if len(source) == 0 {
+		source = "media.ccc.de"
+	}
+	source := fmt.Sprintf("https://api.%s/public/conferences", source)
+	ci, err := findConferences(source)
 	if err != nil {
 		panic(err)
 	}
