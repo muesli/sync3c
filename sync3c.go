@@ -68,7 +68,7 @@ func main() {
 	flag.StringVar(&name, "name", "", "download media of a specific conference only (e.g. '33c3')")
 	flag.StringVar(&downloadPath, "destination", "./downloads/", "where to store downloaded media")
 	flag.StringVar(&language, "language", "", "preferred language if available (eng, deu or fra)")
-	flag.StringVar(&source, "source", "media.ccc.de", "source of conferences (e.g. 'media.freifunk.net'")
+	flag.StringVar(&source, "source", "media.ccc.de", "source of conferences")
 	flag.Parse()
 
 	if len(flag.Args()) > 0 {

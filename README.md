@@ -69,24 +69,9 @@ $ $GOPATH/bin/sync3c -language eng -destination /my/downloads
 ...
 ```
 
-#### List events from an alternate source
+#### Use a different media source
 ```
-$ $GOPATH/bin/sync3c -source media.freifunk.net list
-Conference: misc (Verschiedene Beiträge)
-Conference: 35c3oio (35c3 - Open Infrastructure Orbit)
-Conference: 36c3oio (36c3 - Open Infrastructure Orbit)
-Conference: wcw2018 (Wireless Meshup)
-Conference: bmv12 (Battlemesh v12)
-...
-```
-
-### Download all talks from an alternate source
-```
-$ $GOPATH/bin/sync3c -source media.freifunk.net -name bmv12 -language eng
-Conference: bmv12 (Battlemesh v12)
-Event: Models for affordable and universal networks: public infrastructure and community networks - This panel will focus on a central question: ...
-        Found video (video/mp4): 54 minutes, 1920x1080 (HD: true, 785MiB) https://api.media.freifunk.net/public/recordings/214
-        Found video (video/webm): 54 minutes, 1920x1080 (HD: true, 508MiB) https://api.media.freifunk.net/public/recordings/213
+$ $GOPATH/bin/sync3c -source media.freifunk.net ...
 ...
 ```
 
