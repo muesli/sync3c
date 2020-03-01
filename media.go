@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// Recording represents a single recording
 type Recording struct {
 	ConferenceURL string `json:"conference_url"`
 	EventURL      string `json:"event_url"`
@@ -23,6 +24,7 @@ type Recording struct {
 	Width         int64  `json:"width"`
 }
 
+// Media represents a single talk
 type Media struct {
 	ConferenceURL    string      `json:"conference_url"`
 	Date             string      `json:"date"`

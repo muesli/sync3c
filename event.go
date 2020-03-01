@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// Event represents a single event
 type Event struct {
 	ConferenceURL    string   `json:"conference_url"`
 	Date             string   `json:"date"`
@@ -26,6 +27,7 @@ type Event struct {
 	URL              string   `json:"url"`
 }
 
+// Event represents a series of events
 type Events struct {
 	Acronym        string  `json:"acronym"`
 	AspectRatio    string  `json:"aspect_ratio"`

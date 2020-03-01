@@ -21,6 +21,7 @@ var (
 	listOnly     bool
 )
 
+// Conference represents a single conference
 type Conference struct {
 	Acronym        string `json:"acronym"`
 	AspectRatio    string `json:"aspect_ratio"`
@@ -35,6 +36,7 @@ type Conference struct {
 	WebgenLocation string `json:"webgen_location"`
 }
 
+// Conferences is a list of conferences
 type Conferences struct {
 	Conferences []Conference `json:"conferences"`
 }

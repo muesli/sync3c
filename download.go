@@ -11,10 +11,12 @@ import (
 	"github.com/muesli/goprogressbar"
 )
 
+// WriteProgressBar is an io.Writer that updates a download progress-bar
 type WriteProgressBar struct {
 	ProgressBar *goprogressbar.ProgressBar
 }
 
+// SizeToString returns a human-readable string for file-sizes
 func SizeToString(size uint64) (str string) {
 	b := float64(size)
 
@@ -38,6 +40,7 @@ func SizeToString(size uint64) (str string) {
 	return
 }
 
+// Write updates the progress-bar
 func (wc *WriteProgressBar) Write(p []byte) (int, error) {
 	n := len(p)
 	wc.ProgressBar.Current += int64(n)
