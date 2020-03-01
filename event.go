@@ -27,7 +27,7 @@ type Event struct {
 	URL              string   `json:"url"`
 }
 
-// Event represents a series of events
+// Events represents a series of events
 type Events struct {
 	Acronym        string  `json:"acronym"`
 	AspectRatio    string  `json:"aspect_ratio"`
