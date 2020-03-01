@@ -10,8 +10,6 @@ import (
 	"github.com/kennygrant/sanitize"
 )
 
-const ()
-
 var (
 	preferredMimeTypes    = []string{"video/webm", "video/mp4", "video/ogg", "audio/ogg", "audio/opus", "audio/mpeg", "application/x-subrip"}
 	extensionForMimeTypes = make(map[string]string)
