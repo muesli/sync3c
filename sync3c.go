@@ -5,9 +5,12 @@ import (
 	"flag"
 	"fmt"
 	"net/http"
+	"os"
+	"sort"
 	"strings"
 
 	"github.com/kennygrant/sanitize"
+	"github.com/olekukonko/tablewriter"
 )
 
 var (
@@ -18,7 +21,6 @@ var (
 	name         string
 	language     string
 	source       string
-	listOnly     bool
 )
 
 // Conference represents a single conference
@@ -40,6 +42,13 @@ type Conference struct {
 type Conferences struct {
 	Conferences []Conference `json:"conferences"`
 }
+
+// ByTitle implements sort.Interface based on the Title field.
+type ByTitle []Conference
+
+func (a ByTitle) Len() int           { return len(a) }
+func (a ByTitle) Less(i, j int) bool { return a[i].Title < a[j].Title }
+func (a ByTitle) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 
 func priorityForMimeType(mime string) int {
 	for i, v := range preferredMimeTypes {
@@ -64,6 +73,26 @@ func findConferences(url string) (Conferences, error) {
 	return ci, err
 }
 
+func listConferences() {
+	ci, err := findConferences(fmt.Sprintf("https://api.%s/public/conferences", source))
+	if err != nil {
+		panic(err)
+	}
+
+	sort.Sort(ByTitle(ci.Conferences))
+
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"Conference", "Title"})
+	table.SetBorders(tablewriter.Border{Left: false, Top: false, Right: false, Bottom: false})
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+	table.SetAutoWrapText(false)
+
+	for _, v := range ci.Conferences {
+		table.Append([]string{v.Acronym, v.Title})
+	}
+	table.Render()
+}
+
 func main() {
 	flag.StringVar(&name, "name", "", "download media of a specific conference only (e.g. '33c3')")
 	flag.StringVar(&downloadPath, "destination", "./downloads/", "where to store downloaded media")
@@ -71,9 +100,15 @@ func main() {
 	flag.StringVar(&source, "source", "media.ccc.de", "source of conferences")
 	flag.Parse()
 
+	var listOnly bool
 	if len(flag.Args()) > 0 {
 		arg := strings.ToLower(flag.Args()[0])
 		listOnly = arg == "list"
+	}
+
+	if listOnly {
+		listConferences()
+		return
 	}
 
 	name = strings.ToLower(name)
@@ -94,14 +129,11 @@ func main() {
 
 	found := false
 	for _, v := range ci.Conferences {
-		if !listOnly && len(name) > 0 && name != strings.ToLower(v.Acronym) {
+		if len(name) > 0 && name != strings.ToLower(v.Acronym) {
 			continue
 		}
 		fmt.Printf("Conference: %s (%s)\n", v.Acronym, v.Title)
 		found = true
-		if listOnly {
-			continue
-		}
 
 		events, err := findEvents(v.URL)
 		if err != nil {
