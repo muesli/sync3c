@@ -1,5 +1,10 @@
 sync3c
-=======
+======
+
+[![Latest Release](https://img.shields.io/github/release/muesli/sync3c.svg)](https://github.com/muesli/sync3c/releases)
+[![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://godoc.org/github.com/muesli/sync3c)
+[![Build Status](https://github.com/muesli/sync3c/workflows/build/badge.svg)](https://github.com/muesli/sync3c/actions)
+[![Go ReportCard](http://goreportcard.com/badge/muesli/sync3c)](http://goreportcard.com/report/muesli/sync3c)
 
 A little tool to sync/download media from https://media.ccc.de
 
