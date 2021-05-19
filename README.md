@@ -4,7 +4,7 @@ sync3c
 [![Latest Release](https://img.shields.io/github/release/muesli/sync3c.svg)](https://github.com/muesli/sync3c/releases)
 [![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://godoc.org/github.com/muesli/sync3c)
 [![Build Status](https://github.com/muesli/sync3c/workflows/build/badge.svg)](https://github.com/muesli/sync3c/actions)
-[![Go ReportCard](http://goreportcard.com/badge/muesli/sync3c)](http://goreportcard.com/report/muesli/sync3c)
+[![Go ReportCard](https://goreportcard.com/badge/muesli/sync3c)](https://goreportcard.com/report/muesli/sync3c)
 
 A little tool to sync/download media from https://media.ccc.de
 
@@ -25,7 +25,7 @@ It will create sub-directories for each conference within that destination and w
 
 ### From Source
 
-Make sure you have a working Go environment. Follow the [Go install instructions](http://golang.org/doc/install.html).
+Make sure you have a working Go environment. Follow the [Go install instructions](https://golang.org/doc/install.html).
 
 To install sync3c, simply run:
 
